@@ -1,1 +1,0 @@
-INDEX VERSION 1.131+/Users/amotavas/Desktop/repos/github/fnserverless/.metadata/.plugins/org.eclipse.jdt.core
