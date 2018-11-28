@@ -30,3 +30,18 @@ def handler(ctx, data=None, loop=None):
 if __name__ == "__main__":
     fdk.handle(handler)
 
+
+
+def findMin(output):
+    elements = output['rows'][0]['elements']
+    countInc = 0
+    mindex = 0
+    minDurVal = elements[0]['duration']['value']
+    minDistVal = elements[0]['distance']['value']
+    for i in elements:
+        if(countInc==0):
+            next
+        if(i['duration']['value'] < minDurVal or i['distance']['value'] < minDistVal and i['duration']['value'] == minDurVal):
+            mindex = countInc
+            minDurVal = i['duration']['value']
+        countInc+=1
