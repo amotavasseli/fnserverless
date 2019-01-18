@@ -4,28 +4,35 @@ import requests
 
 
 def handler(ctx, data=None, loop=None):
-    addresses = {
-        "destinations": [
-            "10450 Eastborne Ave. Los Angeles, CA 90403","3730 may st Los Angeles, Ca 90066"
-        ], 
-        "origins": [
-            "955 2nd St. Santa Monica, CA 90403"
-        ],
+    package = {
+        "destination":"hongkong",
+        "source":"Munich",
+        "name":"balls",
+        "id":"",
+        "history":""
+
     }
     
-    destination = "" #contains our appended string for api Call
-    count = 0
-    for i in addresses['destinations']:
-        if(count > 0) :
-            destination += "|"
-        destination += i
-        count +=1
+    #For testing multiple locations.
+    # destination = "" 
+    # count = 0
+    # for i in addresses['destinations']:
+    #     if(count > 0) :
+    #         destination += "|"
+    #     destination += i
+    #     count +=1
     
+    req = requests.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + package['source'][0] + '&destinations=' + package['destinations'][0] + '&key=AIzaSyD27N9mxT47VEQ3MX80dZZJa4_HdczBd_4&mode=transit')
+    json_response = json.loads(req.content)['rows'][0]['elements'][0]
 
+    if(json_response['status']=="\"ZERO_RESULTS\"" or json_response['distance']['value'] <50000):
+        req = requests.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + package['source'][0] + '&destinations=' + package['destinations'][0] + '&key=AIzaSyD27N9mxT47VEQ3MX80dZZJa4_HdczBd_4&mode=driving')
+        json_response = json.loads(req.content)
 
-    req = requests.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + addresses['origins'][0] + '&destinations=' + destination + '&key=AIzaSyD27N9mxT47VEQ3MX80dZZJa4_HdczBd_4')
-    json_response = json.loads(req.content)
-    return("timeInSecs: " + json.dumps(json_response['rows'][0]['elements']))
+    # json_response = json.dumps(json_response['rows'][0]['elements'][0]['status'])
+    
+    if(json_response=="ZERO_RESULTS" or json_response=="\"ZERO_RESULTS\""):
+        return (json_response)
 
 if __name__ == "__main__":
     fdk.handle(handler)
